@@ -1,53 +1,34 @@
-function filtraChuvasMes (colecaoChuvasDeMeteoro, dataAtual){
-    dataAtual = new Date();
+import colecaoChuvasDeMeteoros from "../dados/dados.js";
 
-    const ano = dataAtual.getFullYear();
-    const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
-    const dia = String(dataAtual.getDate()).padStart(2, '0');
+function chuvasMeteorosHoje(chuva,dataAtual){
+    const anoAtual = dataAtual.getFullYear();
 
-    const dataAtualizada = `${ano}/${mes}/${dia}`;
-    colecaoChuvasDeMeteoro.forEach((item) => {
-       let inicio = `${ano}/${item.inicio}`;
-       let fim = `${ano}/${item.fim}`;
+    const dataInicio = new Date(chuva.inicio + '/' + anoAtual);
+    const dataFim = new Date(chuva.fim +'/'+ anoAtual);
 
-       if(inicio > fim){
-            fim = `${ano + 1}/${item.fim}`;
-       };
-
-       if(dataAtualizada >= inicio && dataAtualizada <= fim){
-            console.log(`nome: ${item.nome}\ninicio: ${inicio}\nfim: ${fim}\npico: ${item.pico}\nascensao: ${item.ascensao}\ndeclinacao: ${item.declinacao}\nvelocidade: ${item.velocidade}\nthz: ${item.thz}\nintensidade: ${item.intensidade}\n`);
-       };
-    });
+    if(dataInicio.getMonth() + 1 > dataFim.getMonth + 1){
+        const anoFim = dataFim.getFullYear();
+        dataFim.setFullYear(anoFim + 1);
+    }
+    return (dataAtual >= dataInicio && dataAtual <= dataFim);
 };
 
 
-function filtroChuvaDoisMes (colecaoChuvasDeMeteoro, dataAtual){
-    dataAtual = new Date();
 
-    const ano = dataAtual.getFullYear();
-    const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
-    const dia = String(dataAtual.getDate()).padStart(2, '0');
+function chuvaMeteorosDoisMes(chuva,data){
+    const dataAtual = data;
+    const anoAtual = dataAtual.getFullYear();
+    const dataInicio = new Date(chuva.inicio + '/' + anoAtual);
+    const dataFim = new Date(dataAtual);
+    
+    if ( dataAtual.getMonth() + 1 > dataInicio.getMonth() + 1 ) {
+        const anoFinal = dataInicio.getFullYear();
+        dataInicio.setFullYear(anoFinal +1);
+    };
 
-    const dataFormatada = `${ano}/${mes}/${dia}`;
+    dataFim.setMonth( dataFim.getMonth() + 2 );
 
-    colecaoChuvasDeMeteoro.forEach((item) => {
-        let inicio = `${ano}/${item.inicio}`;
-        let fim = `${ano}/${item.fim}`;
-
-
-        if(dataFormatada > inicio){
-            inicio = `${ano + 1}/${item.inicio}`;
-        }
-
-        const doisMes = String(dataAtual.getMonth() + 3).padStart(2, '0');
-        const day = String(dataAtual.getDate()).padStart(2, '0');
-
-        const dataDaquiDoisMes = `${dataAtual.getFullYear()}/${doisMes}/${day}`;
-
-        if(dataFormatada < inicio && inicio < dataDaquiDoisMes){
-            console.log(`${item.nome}\ninicio: ${inicio}\nfim: ${fim}\npico: ${item.pico}\nascencao: ${item.ascencao}\ndeclinacao: ${item.declinacao}\nvelocidade: ${item.velocidade}\nthz: ${item.thz}\nintensidade: ${item.intensidade}\n`);
-        };   
-    });
+    return ( dataAtual < dataInicio && dataInicio < dataFim );
 };
 
 //em teste
@@ -74,5 +55,5 @@ export function retornaIntensidade  (intensidade){
 
 export const retornaHemisferio = (declinacao) => declinacao >= 0 ? 'Norte' : 'Sul';
 
-export {filtraChuvasMes,filtroChuvaDoisMes};
+export {chuvasMeteorosHoje,chuvaMeteorosDoisMes};
 

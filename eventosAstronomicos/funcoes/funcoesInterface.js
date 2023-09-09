@@ -1,5 +1,4 @@
 import { inverteMesAno, retornaHemisferio, retornaIntensidade } from "./logicaEventoMeteoro.js";
-
 const imprimeListaDeChuvas = (lista) => {
     console.log('\nNOME DA CHUVA               - INTENSIDADE - HEMISFÉRIO - PERÍODO');
 
